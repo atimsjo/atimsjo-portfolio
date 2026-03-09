@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A. Timsjö — Måleri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+SC:wght@300;400;600&family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f4f0ea;
+      --bg-hero: #eee9e0;
+      --ink: #1c1c1c;
+      --ink-soft: #3d3832;
+      --accent: #5e5038;
+      --accent-light: #97896e;
+      --muted: #7a7264;
+      --line: #d4cbb5;
+      --line-faint: #e3ddd2;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-light) var(--bg);
+    }
+
+    body {
+      font-family: 'Cormorant', Georgia, serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── SUBTLE LINEN TEXTURE ─── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ─── NAVIGATION ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      padding: 1.4rem 2rem;
+      background: linear-gradient(to bottom, rgba(244,240,234,1) 0%, rgba(244,240,234,0.95) 60%, rgba(244,240,234,0) 100%);
+      transition: opacity 0.6s ease;
+    }
+
+    nav a {
+      font-family: 'Cormorant SC', serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover { color: var(--accent); }
+    nav a:hover::after { width: 100%; }
+
+    /* ─── HERO ─── */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-hero);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('img/kvinna-i-rott.jpg') center center / cover no-repeat;
+      opacity: 0;
+      animation: heroBgReveal 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+    }
+
+    @keyframes heroBgReveal {
+      to { opacity: 1; }
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 70% at 50% 50%, rgba(238,233,224,0.68) 0%, rgba(238,233,224,0.85) 50%, rgba(238,233,224,0.95) 100%);
+    }
+
+    .hero-name {
+      font-family: 'Bodoni Moda', serif;
+      font-weight: 400;
+      font-size: clamp(3rem, 8vw, 7.5rem);
+      letter-spacing: 0.12em;
+      color: var(--ink);
+      text-transform: uppercase;
+      line-height: 0.95;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroReveal 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+    }
+
+    .hero-sub {
+      font-family: 'Cormorant SC', serif;
+      font-weight: 400;
+      font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+      font-weight: 600;
+      letter-spacing: 0.5em;
+      color: var(--accent);
+      margin-top: 1.5rem;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: heroReveal 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
+    }
+
+    .hero-line {
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--accent-light), transparent);
+      margin-top: 3rem;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: heroReveal 1.2s ease 1.4s forwards;
+    }
+
+    @keyframes heroReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SCROLL INDICATOR ─── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: heroReveal 1s ease 2s forwards;
+    }
+
+    .scroll-hint span {
+      font-family: 'Cormorant SC', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+    }
+
+    .scroll-arrow {
+      width: 1px;
+      height: 24px;
+      background: var(--accent-light);
+      position: relative;
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    .scroll-arrow::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -3px;
+      width: 7px;
+      height: 7px;
+      border-right: 1px solid var(--accent-light);
+      border-bottom: 1px solid var(--accent-light);
+      transform: rotate(45deg);
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: translateY(0); }
+      50% { opacity: 0.7; transform: translateY(6px); }
+    }
+
+    /* ─── SECTION STYLING ─── */
+    .gallery-section {
+      padding: 6rem 0 4rem;
+      position: relative;
+      scroll-margin-top: 3rem;
+    }
+
+    footer#om {
+      scroll-margin-top: 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 0 clamp(2rem, 6vw, 6rem);
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Cormorant SC', serif;
+      font-weight: 600;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      letter-spacing: 0.4em;
+      color: var(--accent);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--line), transparent);
+      opacity: 0.6;
+    }
+
+    .section-numeral {
+      font-family: 'Bodoni Moda', serif;
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: var(--accent-light);
+      letter-spacing: 0.2em;
+    }
+
+    /* ─── SALON WALL LAYOUTS ─── */
+    .salon-wall {
+      padding: 0 clamp(1.5rem, 5vw, 5rem);
+    }
+
+    /* Studier: Two classical pieces, side by side */
+    .salon-studier {
+      display: grid;
+      grid-template-columns: 1fr 0.85fr;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .salon-studier .painting:nth-child(2) {
+      align-self: end;
+    }
+
+    /* Porträtt: Staggered gallery arrangement */
+    .salon-portratt {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .salon-portratt .painting:nth-child(1) {
+      grid-column: 1;
+      align-self: end;
+    }
+
+    .salon-portratt .painting:nth-child(2) {
+      grid-column: 2;
+      transform: translateY(-1.5rem);
+    }
+
+    .salon-portratt .painting:nth-child(3) {
+      grid-column: 3;
+      align-self: center;
+    }
+
+    .salon-portratt .painting:nth-child(4) {
+      grid-column: 1;
+      justify-self: end;
+      max-width: 70%;
+    }
+
+    .salon-portratt .painting:nth-child(5) {
+      grid-column: 2;
+      justify-self: center;
+      max-width: 65%;
+    }
+
+    .salon-portratt .painting:nth-child(6) {
+      grid-column: 3;
+      align-self: start;
+      max-width: 75%;
+    }
+
+    /* Övrigt: Organic, overlapping feel */
+    .salon-ovrigt {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.9fr;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .salon-ovrigt .painting:nth-child(1) {
+      grid-column: 1 / 2;
+      grid-row: 1;
+    }
+
+    .salon-ovrigt .painting:nth-child(2) {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: end;
+    }
+
+    .salon-ovrigt .painting:nth-child(3) {
+      grid-column: 3;
+      grid-row: 1;
+      align-self: center;
+    }
+
+    .salon-ovrigt .painting:nth-child(4) {
+      grid-column: 1;
+      grid-row: 2;
+      justify-self: center;
+    }
+
+    .salon-ovrigt .painting:nth-child(5) {
+      grid-column: 2 / 4;
+      grid-row: 2;
+      max-width: 85%;
+      justify-self: center;
+    }
+
+    /* ─── PAINTING CARD ─── */
+    .painting {
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+    }
+
+    .painting.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .painting img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 2px;
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.08),
+        0 8px 30px rgba(0,0,0,0.06);
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  box-shadow 0.5s ease;
+    }
+
+    .painting:hover img {
+      transform: scale(1.015) translateY(-3px);
+      box-shadow:
+        0 6px 16px rgba(0,0,0,0.1),
+        0 16px 50px rgba(0,0,0,0.08);
+    }
+
+    /* ─── DIVIDER ─── */
+    .section-divider {
+      display: flex;
+      justify-content: center;
+      padding: 5rem 0;
+    }
+
+    .section-divider .diamond {
+      width: 6px;
+      height: 6px;
+      border: 1px solid var(--line);
+      transform: rotate(45deg);
+      opacity: 0.7;
+    }
+
+    /* ─── ABOUT / FOOTER ─── */
+    .about {
+      padding: 4rem clamp(2rem, 6vw, 6rem) 5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      gap: 3rem;
+      align-items: flex-start;
+      border-top: 1px solid var(--line-faint);
+    }
+
+    .about-photo {
+      flex-shrink: 0;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--line-faint);
+    }
+
+    .about-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-text h3 {
+      font-family: 'Cormorant SC', serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.35em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-text p {
+      font-family: 'Cormorant', serif;
+      font-weight: 500;
+      font-size: 1.15rem;
+      line-height: 1.75;
+      color: var(--ink-soft);
+    }
+
+    .about-text p + p { margin-top: 0.8rem; }
+
+    .footer-line {
+      text-align: center;
+      padding: 2rem 0 3rem;
+      font-family: 'Cormorant SC', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      color: var(--muted);
+    }
+
+    /* ─── LIGHTBOX ─── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(244,240,234,0.96);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 2px;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.15);
+      transform: scale(0.92);
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .lightbox.active img {
+      transform: scale(1);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--ink-soft);
+      font-size: 1.5rem;
+      opacity: 0.4;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox-close:hover { opacity: 0.8; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { gap: 1.5rem; padding: 1rem 1rem; }
+      nav a { font-size: 0.65rem; letter-spacing: 0.15em; }
+
+      .salon-studier {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .salon-portratt {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+      }
+      .salon-portratt .painting:nth-child(2) { transform: none; }
+      .salon-portratt .painting:nth-child(4),
+      .salon-portratt .painting:nth-child(5),
+      .salon-portratt .painting:nth-child(6) { max-width: 100%; }
+
+      .salon-ovrigt {
+        grid-template-columns: 1fr 1fr;
+      }
+      .salon-ovrigt .painting:nth-child(5) { max-width: 100%; grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-name { letter-spacing: 0.06em; }
+
+      .section-header { margin-bottom: 2.5rem; }
+
+      .salon-studier,
+      .salon-portratt,
+      .salon-ovrigt {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .salon-portratt .painting:nth-child(4),
+      .salon-portratt .painting:nth-child(5),
+      .salon-portratt .painting:nth-child(6) {
+        max-width: 80%;
+        justify-self: center;
+      }
+
+      .salon-ovrigt .painting:nth-child(5) { max-width: 90%; }
+
+      .about {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 2rem;
+      }
+
+      .about-photo {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
+    /* ─── STAGGER DELAYS ─── */
+    .painting:nth-child(1) { transition-delay: 0s; }
+    .painting:nth-child(2) { transition-delay: 0.12s; }
+    .painting:nth-child(3) { transition-delay: 0.24s; }
+    .painting:nth-child(4) { transition-delay: 0.36s; }
+    .painting:nth-child(5) { transition-delay: 0.48s; }
+    .painting:nth-child(6) { transition-delay: 0.6s; }
+
+    .section-header {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .section-header.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#fria-verk">Fria verk</a>
+    <a href="#portratt">Porträtt</a>
+    <a href="#studier">Studier</a>
+    <a href="#om">Om</a>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <h1 class="hero-name">Anders<br>Timsjö</h1>
+    <p class="hero-sub">Måleri</p>
+    <div class="hero-line"></div>
+    <div class="scroll-hint">
+      <span>Utforska</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </header>
+
+  <!-- ═══ FRIA VERK ═══ -->
+  <section class="gallery-section" id="fria-verk">
+    <div class="section-header">
+      <span class="section-numeral">I</span>
+      <h2>Fria verk</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="salon-wall salon-ovrigt">
+      <div class="painting"><img src="img/kvinna-bland-kandelabrar.jpg" alt="Kvinna bland kandelabrar" loading="lazy"></div>
+      <div class="painting"><img src="img/kvinna-i-tradgard.jpg" alt="Kvinna i trädgård" loading="lazy"></div>
+      <div class="painting"><img src="img/gronska.jpg" alt="Grönska" loading="lazy"></div>
+      <div class="painting"><img src="img/kvinna-i-rott.jpg" alt="Kvinna i rött" loading="lazy"></div>
+      <div class="painting"><img src="img/tva-figurer-i-skogen.jpg" alt="Två figurer i skogen" loading="lazy"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"><div class="diamond"></div></div>
+
+  <!-- ═══ PORTRÄTT ═══ -->
+  <section class="gallery-section" id="portratt">
+    <div class="section-header">
+      <span class="section-numeral">II</span>
+      <h2>Porträtt</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="salon-wall salon-portratt">
+      <div class="painting"><img src="img/mansportratt.jpg" alt="Mansporträtt" loading="lazy"></div>
+      <div class="painting"><img src="img/kvinna-gyllene-har.jpg" alt="Kvinna med gyllene hår" loading="lazy"></div>
+      <div class="painting"><img src="img/portratt-i-landskap.jpg" alt="Porträtt i landskap" loading="lazy"></div>
+      <div class="painting"><img src="img/portratt-rod-ram.jpg" alt="Porträtt i röd ram" loading="lazy"></div>
+      <div class="painting"><img src="img/ung-kvinna.jpg" alt="Ung kvinna" loading="lazy"></div>
+      <div class="painting"><img src="img/portratt-blick-uppat.jpg" alt="Porträtt, blick uppåt" loading="lazy"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"><div class="diamond"></div></div>
+
+  <!-- ═══ STUDIER ═══ -->
+  <section class="gallery-section" id="studier">
+    <div class="section-header">
+      <span class="section-numeral">III</span>
+      <h2>Studier</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="salon-wall salon-studier">
+      <div class="painting"><img src="img/studie-tizian.jpg" alt="Studie efter Tizian" loading="lazy"></div>
+      <div class="painting"><img src="img/studie-poussin.jpg" alt="Studie efter Poussin" loading="lazy"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"><div class="diamond"></div></div>
+
+  <!-- ═══ OM ═══ -->
+  <footer id="om">
+    <div class="about">
+      <div class="about-photo">
+        <img src="img/profil.jpg" alt="Anders Timsjö">
+      </div>
+      <div class="about-text">
+        <h3>Om konstnären</h3>
+        <p>
+          Anders Timsjö är en svensk konstnär vars måleri spänner från
+          noggranna studier av de klassiska mästarna till expressiva porträtt
+          och figurativa kompositioner. Med en palett rotad i den skandinaviska
+          ljustraditionen söker han fånga det flyktiga i varje motiv —
+          ögonblickets stämning, ljusets spel över hud och landskap.
+        </p>
+        <p>
+          Verksam i Stockholm. Arbetar uteslutande i olja.
+        </p>
+      </div>
+    </div>
+    <div class="footer-line">A. Timsjö &mdash; MMXXVI</div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-close">&times;</div>
+    <img src="" alt="Förstoring">
+  </div>
+
+  <script>
+    /* ─── SCROLL REVEAL ─── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.painting, .section-header').forEach(el => observer.observe(el));
+
+    /* ─── LIGHTBOX ─── */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+
+    document.querySelectorAll('.painting img').forEach(img => {
+      img.addEventListener('click', () => {
+        // Use the original high-res version from pictures/ if available
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target !== lightboxImg) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    /* ─── HIDE SCROLL HINT ON SCROLL ─── */
+    const scrollHint = document.querySelector('.scroll-hint');
+    let hintHidden = false;
+    window.addEventListener('scroll', () => {
+      if (!hintHidden && window.scrollY > 80) {
+        scrollHint.style.opacity = '0';
+        scrollHint.style.transition = 'opacity 0.5s ease';
+        hintHidden = true;
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

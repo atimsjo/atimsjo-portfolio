@@ -1,0 +1,8 @@
+# Original source images (large HEIC/JPG files)
+pictures/
+
+# macOS
+.DS_Store
+
+# Claude Code
+.claude/
