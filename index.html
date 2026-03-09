@@ -463,6 +463,18 @@
 
     .about-text p + p { margin-top: 0.8rem; }
 
+    .about-text a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+      transition: border-color 0.3s ease, color 0.3s ease;
+    }
+
+    .about-text a:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+    }
+
     .footer-line {
       text-align: center;
       padding: 2rem 0 3rem;
@@ -707,6 +719,9 @@
         </p>
         <p>
           Verksam i Eskilstuna. Arbetar främst i olja.
+        </p>
+        <p>
+          För kontakt: <a href="mailto:atimsjo@gmail.com">atimsjo@gmail.com</a>
         </p>
       </div>
     </div>
